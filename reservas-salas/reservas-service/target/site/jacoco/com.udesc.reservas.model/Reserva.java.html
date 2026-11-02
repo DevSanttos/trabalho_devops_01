@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Reserva.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">reservas-service</a> &gt; <a href="index.source.html" class="el_package">com.udesc.reservas.model</a> &gt; <span class="el_source">Reserva.java</span></div><h1>Reserva.java</h1><pre class="source lang-java linenums">package com.udesc.reservas.model;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;reservas&quot;)
+public class Reserva {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Long salaId;
+
+    @Column(nullable = false)
+    private String usuario;
+
+    @Column(nullable = false)
+    private LocalDateTime inicio;
+
+    @Column(nullable = false)
+    private LocalDateTime fim;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusReserva status;
+
+<span class="nc" id="L31">    public Reserva() {</span>
+<span class="nc" id="L32">    }</span>
+
+<span class="fc" id="L34">    public Reserva(Long salaId, String usuario, LocalDateTime inicio, LocalDateTime fim) {</span>
+<span class="fc" id="L35">        this.salaId = salaId;</span>
+<span class="fc" id="L36">        this.usuario = usuario;</span>
+<span class="fc" id="L37">        this.inicio = inicio;</span>
+<span class="fc" id="L38">        this.fim = fim;</span>
+<span class="fc" id="L39">        this.status = StatusReserva.PENDENTE;</span>
+<span class="fc" id="L40">    }</span>
+
+    public Long getId() {
+<span class="fc" id="L43">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L47">        this.id = id;</span>
+<span class="nc" id="L48">    }</span>
+
+    public Long getSalaId() {
+<span class="fc" id="L51">        return salaId;</span>
+    }
+
+    public void setSalaId(Long salaId) {
+<span class="nc" id="L55">        this.salaId = salaId;</span>
+<span class="nc" id="L56">    }</span>
+
+    public String getUsuario() {
+<span class="fc" id="L59">        return usuario;</span>
+    }
+
+    public void setUsuario(String usuario) {
+<span class="nc" id="L63">        this.usuario = usuario;</span>
+<span class="nc" id="L64">    }</span>
+
+    public LocalDateTime getInicio() {
+<span class="fc" id="L67">        return inicio;</span>
+    }
+
+    public void setInicio(LocalDateTime inicio) {
+<span class="nc" id="L71">        this.inicio = inicio;</span>
+<span class="nc" id="L72">    }</span>
+
+    public LocalDateTime getFim() {
+<span class="fc" id="L75">        return fim;</span>
+    }
+
+    public void setFim(LocalDateTime fim) {
+<span class="nc" id="L79">        this.fim = fim;</span>
+<span class="nc" id="L80">    }</span>
+
+    public StatusReserva getStatus() {
+<span class="fc" id="L83">        return status;</span>
+    }
+
+    public void setStatus(StatusReserva status) {
+<span class="fc" id="L87">        this.status = status;</span>
+<span class="fc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

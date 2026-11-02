@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReservaService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">reservas-service</a> &gt; <a href="index.source.html" class="el_package">com.udesc.reservas.service</a> &gt; <span class="el_source">ReservaService.java</span></div><h1>ReservaService.java</h1><pre class="source lang-java linenums">package com.udesc.reservas.service;
+
+import com.udesc.reservas.client.SalaClient;
+import com.udesc.reservas.dto.ReservaConfirmadaEvent;
+import com.udesc.reservas.dto.ReservaRequest;
+import com.udesc.reservas.exception.ReservaInvalidaException;
+import com.udesc.reservas.exception.SalaIndisponivelException;
+import com.udesc.reservas.messaging.ReservaEventPublisher;
+import com.udesc.reservas.model.Reserva;
+import com.udesc.reservas.model.StatusReserva;
+import com.udesc.reservas.repository.ReservaRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public class ReservaService {
+
+    private final ReservaRepository reservaRepository;
+    private final SalaClient salaClient;
+    private final ReservaEventPublisher eventPublisher;
+
+<span class="fc" id="L24">    public ReservaService(ReservaRepository reservaRepository, SalaClient salaClient, ReservaEventPublisher eventPublisher) {</span>
+<span class="fc" id="L25">        this.reservaRepository = reservaRepository;</span>
+<span class="fc" id="L26">        this.salaClient = salaClient;</span>
+<span class="fc" id="L27">        this.eventPublisher = eventPublisher;</span>
+<span class="fc" id="L28">    }</span>
+
+    public Reserva criarReserva(ReservaRequest request) {
+<span class="fc" id="L31">        validarDados(request);</span>
+
+<span class="fc" id="L33">        Reserva reserva = new Reserva(request.getSalaId(), request.getUsuario(), request.getInicio(), request.getFim());</span>
+<span class="fc" id="L34">        reserva = reservaRepository.save(reserva);</span>
+
+        try {
+<span class="fc" id="L37">            salaClient.reservarSala(request.getSalaId());</span>
+<span class="fc" id="L38">        } catch (IllegalStateException ex) {</span>
+<span class="fc" id="L39">            reserva.setStatus(StatusReserva.CANCELADA);</span>
+<span class="fc" id="L40">            reservaRepository.save(reserva);</span>
+<span class="fc" id="L41">            throw new SalaIndisponivelException(request.getSalaId());</span>
+        }
+
+        try {
+<span class="fc" id="L45">            reserva.setStatus(StatusReserva.CONFIRMADA);</span>
+<span class="fc" id="L46">            reserva = reservaRepository.save(reserva);</span>
+
+<span class="fc" id="L48">            eventPublisher.publicarReservaConfirmada(new ReservaConfirmadaEvent(</span>
+<span class="fc" id="L49">                    reserva.getId(), reserva.getSalaId(), reserva.getUsuario(), reserva.getInicio(), reserva.getFim()));</span>
+<span class="fc" id="L50">        } catch (Exception ex) {</span>
+<span class="fc" id="L51">            salaClient.liberarSala(request.getSalaId());</span>
+<span class="fc" id="L52">            reserva.setStatus(StatusReserva.CANCELADA);</span>
+<span class="fc" id="L53">            reservaRepository.save(reserva);</span>
+<span class="fc" id="L54">            throw new IllegalStateException(&quot;Falha ao confirmar a reserva, operacao compensada&quot;, ex);</span>
+        }
+
+<span class="fc" id="L57">        return reserva;</span>
+    }
+
+    public List&lt;Reserva&gt; listarTodas() {
+<span class="nc" id="L61">        return reservaRepository.findAll();</span>
+    }
+
+    public Reserva buscarPorId(Long id) {
+<span class="nc" id="L65">        return reservaRepository.findById(id)</span>
+<span class="nc" id="L66">                .orElseThrow(() -&gt; new ReservaInvalidaException(&quot;Reserva &quot; + id + &quot; nao encontrada&quot;));</span>
+    }
+
+    private void validarDados(ReservaRequest request) {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (request.getInicio().isBefore(LocalDateTime.now())) {</span>
+<span class="fc" id="L71">            throw new ReservaInvalidaException(&quot;Nao e possivel reservar em uma data/hora no passado&quot;);</span>
+        }
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (!request.getFim().isAfter(request.getInicio())) {</span>
+<span class="fc" id="L74">            throw new ReservaInvalidaException(&quot;O horario de termino deve ser depois do horario de inicio&quot;);</span>
+        }
+<span class="fc" id="L76">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

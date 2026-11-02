@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+reservas-service,com.udesc.reservas.exception,ReservaInvalidaException,0,4,0,0,0,2,0,1,0,1
+reservas-service,com.udesc.reservas.exception,GlobalExceptionHandler,19,0,0,0,3,0,3,0,3,0
+reservas-service,com.udesc.reservas.exception,SalaIndisponivelException,0,6,0,0,0,2,0,1,0,1
+reservas-service,com.udesc.reservas.controller,ReservaController,35,0,0,0,7,0,4,0,4,0
+reservas-service,com.udesc.reservas.service,ReservaService,20,124,0,4,3,28,3,5,3,3
+reservas-service,com.udesc.reservas.dto,ReservaResponse,45,0,0,0,14,0,7,0,7,0
+reservas-service,com.udesc.reservas.dto,ReservaConfirmadaEvent,38,18,0,0,17,7,11,1,11,1
+reservas-service,com.udesc.reservas.dto,ReservaRequest,0,31,0,0,0,13,0,9,0,9
+reservas-service,com.udesc.reservas.messaging,RabbitMQConfig,27,0,0,0,5,0,5,0,5,0
+reservas-service,com.udesc.reservas.messaging,ReservaEventPublisher,21,0,0,0,7,0,2,0,2,0
+reservas-service,com.udesc.reservas,ReservasServiceApplication,11,0,0,0,4,0,2,0,2,0
+reservas-service,com.udesc.reservas.model,Reserva,23,40,0,0,12,15,6,8,6,8
+reservas-service,com.udesc.reservas.model,StatusReserva,0,34,0,0,0,4,0,1,0,1
+reservas-service,com.udesc.reservas.config,RestTemplateConfig,12,0,0,0,5,0,2,0,2,0
+reservas-service,com.udesc.reservas.client,SalaClient,56,0,0,0,12,0,3,0,3,0
